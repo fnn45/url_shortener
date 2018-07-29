@@ -4,6 +4,8 @@
 **credentials for login:**
    * user: admin
    * pass: admin123
+   
+* Scheduler for deleting the URL is triggered every 5 minutes, so you can test its work by creating a new URL, and then update it by setting old date
 
 
 ##### local application startup:
