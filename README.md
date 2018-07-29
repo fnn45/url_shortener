@@ -1,4 +1,4 @@
-**You can look at the application by clicking on the link**: [Live Demo](ec2-18-212-157-125.compute-1.amazonaws.com)
+**You can look at the application by clicking on the link**: [Live Demo](http://ec2-52-91-225-216.compute-1.amazonaws.com)
 
 
 **credentials for login:**
