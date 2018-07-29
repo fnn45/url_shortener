@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: yes
+  vars:
+   source: ../..
+   dest: ~/tmp
+  tasks:
+  - name: create tmp directory on remote host
+    file:
+      path: "{{ dest }}"
+      state: directory
+  - name: copy all files to remote host
+    copy:
+      src: "{{ item }}"
+      dest: "{{ dest }}"
+      owner: root
+      mode: 700
+    loop:
+    - "{{ source }}/url_shortener"

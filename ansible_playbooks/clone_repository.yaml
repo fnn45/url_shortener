@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    dest: ~/tmp
+    repo: "https://github.com/fnn45/url_shortener.git"
+  tasks:
+  - name: create tmp directory on remote host
+    file:
+      path: "{{ dest }}"
+      state: directory
+  - name: clone repository to remote host
+    shell: "{{ item }}"
+    loop:
+      - "cd {{ dest }} && git clone {{ repo }}"
+      - "chmod -R 700 {{ dest }}/url_shortener"

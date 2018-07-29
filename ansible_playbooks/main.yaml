@@ -1,0 +1,6 @@
+---
+
+- import_playbook: ./clone_repository.yaml
+- import_playbook: ./install_docker.yaml
+- import_playbook: ./create_and_start_container.yaml
+

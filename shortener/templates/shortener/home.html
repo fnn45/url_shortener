@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load extra_filters %}
+{% block content %}
+<form class="form-inline text-center create_url" method="post" url="">
+   {% csrf_token %}
+   {{ form }}
+   <input type="submit" value="shorten &raquo;" class="btn btn-primary up">
+</form>
+<div class="row">
+   <div class="col-lg-12 text-center edging">
+      {% ifequal request.session.is_url_exist True %}
+      {% include 'shortener/success.html' %}
+      {% endifequal %}
+      {% ifequal request.session.is_url_exist False %}
+      {% include 'shortener/already_exist.html' %}
+      {% endifequal %}
+   </div>
+</div>
+{% if request.session.url %}
+<div class="adj_menu">
+   <div class="row">
+      <form class="form-group action_form" method="post" url="update_url">
+         {% csrf_token %}
+         <div class="col-lg-12">
+            <div class="row">
+               <label for="correct_url">short url:</label>
+               <div class="input-group">
+                  <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" disabled>{{ request.get_host }}</button>
+                  </span>
+                  {% with base=request.scheme|add:"://"|add:request.get_host|add:"/" %}
+                  <input type="text" class="form-control" id="correct_url" value="{{ request.session.short_url|replace:base }}" name="shortcode">
+                  {% endwith %}
+               </div>
+
+            </div>
+         </div>
+         <div class="col-lg-12">
+            <div class="row">
+               <label for="correct_descr">description:</label>
+               <textarea class="form-control" id="correct_descr" name="description_text">{{ request.session.description  }}</textarea>
+            </div>
+         </div>
+         <input type="hidden" name="url" value="{{ request.session.url }}">
+         <div class="row">
+            <div class="col-lg-6">
+               <label for="correct_date">created:</label>
+               <input type="date" class="form-control" id="correct_date" value="{{ request.session.timestamp  }}" name="timestamp">
+            </div>
+            <div class="col-lg-6">
+               <label for="correct_count">count:</label>
+               <input type="number" class="form-control" id="correct_count" value="{{ request.session.count  }}" name="count">
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-lg-2">
+               <button class="btn btn-block btn-primary btn_save" type="submit">Save</button>
+            </div>
+            <div class="col-lg-2">
+               <button class="btn btn-block btn-default btn_cancel" type="submit">Cancel</button>
+            </div>
+            <div class="col-lg-2 col-lg-offset-5">
+               <button class="btn btn-block btn-danger btn_delete">Delete</button>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+<div class="created">
+   <h3 class="rec"> url was succefully created</h3>
+   <p><span class="rec">url :</span>{{ request.session.url }}</p>
+   <p>
+      <span class="rec">short url : </span> <a href="{{ request.session.short_url }}">{{ request.session.short_url }}</a>
+      <button class="short_url_detail">show details</button>
+   </p>
+   {% include 'shortener/count.html' %}
+</div>

@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    script: ~/tmp/url_shortener/wrap_app.sh
+  tasks:
+  - name: wrap application to docker and start container
+    shell: "{{ script }}"

@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<nav class="header">
+   <div class="logo">
+      <a href="/">Python URL Shortener</a>
+   </div>
+   <div class="header__menu">
+      <ul class="header__menu_list">
+         <li><a href="/admin">Admin Panel</a></li>
+         <li>
+            {% if user.is_authenticated %}
+            Signed in as
+            '{{ user.username }}'
+            {% else %}
+            <a href="/admin/login">Login</a>
+            {% endif %}
+         </li>
+      </ul>
+   </div>
+</nav>
