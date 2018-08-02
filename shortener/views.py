@@ -1,9 +1,11 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from analytics.models import ClickEvent
 from shortener.forms import CheckoutForm, AdjustmentForm
 from shortener.models import UrlDetails
 from .utils import is_exist_url, get_description_text_from_html, initialize_url
+import datetime
 
 
 def create_short_url(request):
@@ -41,6 +43,7 @@ def create_short_url(request):
             return HttpResponseRedirect('/')
     return render(request, 'shortener/home.html', locals())
 
+@csrf_exempt
 def update_short_url(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
@@ -53,12 +56,12 @@ def update_short_url(request):
             shortcode   = session['short_url'] = initialize_url(UrlDetails, protocol, domain, adj_form.cleaned_data['shortcode'])
             description = session['description'] = adj_form.cleaned_data['description_text']
             session['timestamp']  = str(adj_form.cleaned_data['timestamp'])
-            obj, created = UrlDetails.objects.update_or_create(
-                url = session['url'], defaults = {
-                    'shortcode'         : shortcode
-                    ,'description_text' : description
-                    ,'timestamp'        : adj_form.cleaned_data['timestamp']
-                })
+            if UrlDetails.objects.filter(shortcode=shortcode).exists():
+                return HttpResponse('This shortcode already in use', status=203)
+            obj = UrlDetails.objects.filter(url=session['url']).update(
+                shortcode=shortcode
+                ,description_text=description
+                ,timestamp=datetime.datetime.strptime(str(adj_form.cleaned_data['timestamp']), '%Y-%m-%d'))
             ClickEvent.objects.create_event(obj, adj_form.cleaned_data['count'])
             session['count'] = adj_form.cleaned_data['count']
             return HttpResponse(status=200)
